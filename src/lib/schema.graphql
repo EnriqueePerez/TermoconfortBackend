@@ -1,0 +1,4 @@
+type Query {
+  "Retorna un saludo"
+  hello: String
+}

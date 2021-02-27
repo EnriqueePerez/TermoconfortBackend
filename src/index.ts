@@ -3,55 +3,31 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-// env variables
-const { config } = require('./src/config/index');
+//TODO:Env variables
 
-// importing routes
-const storeApi = require('./src/routes/stores');
-const addInfo = require('./src/routes/addInfo');
-const auth = require('./src/routes/auth');
-const operationInfo = require('./src/routes/operationInfo');
+//TODO:importing routes
+// const { api } = './routes/api';
+import { api } from './routes/api';
 
-//importing error handler
-const {
-  logErrors,
-  wrapErrors,
-  errorHandler,
-} = require('./src/utils/middlewares/errorHandlers');
-const notFoundHandler = require('./src/utils/middlewares/notFoundHandler');
+//TODO:importing errorHandlelers
 
-//configuring cors
+//config cors
 app.use(
   cors({
-    origin: config.clientIp,
-    credentials: true,
+    origin: 'http://localhost:3000',
+    // credentials: true //enable when auth is ready
   })
 );
 
-//body parser
+// body-parser json
 app.use(express.json());
 
-//routes
-storeApi(app);
-addInfo(app);
-operationInfo(app);
-auth(app);
+//TODO:adding routes
+api(app);
 
-// Catching 404 error
-app.use(notFoundHandler);
+//TODO:Catching 404 error
+//TODO:Error middlewares
 
-// error middlewares
-app.use(logErrors); //log error on console
-app.use(wrapErrors); // managing if it is a boom error or not
-app.use(errorHandler); //Sending the error to client
-
-app.listen(config.port, () => {
-  console.log(`Listening on http://localhost:${config.port}`);
+app.listen(3000, () => {
+  console.log('Listening on http://localhost:3000');
 });
-
-// const app = require('./src/config/server');
-// require('./src/routes/router')(app);
-
-// app.listen(app.get('port'), () => {
-//   console.log('App corriendo en puerto', app.get('port'));
-// });
