@@ -15,7 +15,7 @@ type Sobrecalentamiento {
   presion_succion: Float
   resistencia_pt1000: Float
   temp_tubo: Float
-  temp_saturacion: FLoat
+  temp_saturacion: Float
   temp_sobrecalentamiento: Float
   temp_ambiente: Float
   aprobado: String
