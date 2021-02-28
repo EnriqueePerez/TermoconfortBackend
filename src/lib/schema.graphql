@@ -2,3 +2,58 @@ type Query {
   "Retorna un saludo"
   hello: String
 }
+
+type Sobrecalentamiento {
+  id: ID
+  horaFecha: Int
+  CR: String
+  id_usuario: Int
+  unidad: String
+  refrigerante: String
+  presion_arranque: Float
+  presion_paro: Float
+  presion_succion: Float
+  resistencia_pt1000: Float
+  temp_tubo: Float
+  temp_saturacion: FLoat
+  temp_sobrecalentamiento: Float
+  temp_ambiente: Float
+  aprobado: String
+  comentarios: String
+}
+
+type EficienciaDeTrabajo {
+  id: ID
+  horaFecha: Int
+  CR: String
+  id_usuario: Int
+  unidad: String
+  retorno: Float
+  inyeccion: Float
+  retorno2: Float
+  inyeccion2: Float
+  porcentaje_evaporador: Float
+  ciclos_evaporador: Float
+  porcentaje_condensador: Float
+  ciclos_condensador: Float
+  delta: Float
+  aprobado: String
+  comentarios: String
+}
+
+type Tiendas {
+  id: ID
+  CR: String
+  nombre: String
+  ciudad: String
+  ubicacion: Int
+}
+
+type Usuarios {
+  id: ID
+  id_usuario: Int
+  nombre: String
+  apellido: String
+  email: String
+  permisos: [String]
+}

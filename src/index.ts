@@ -6,7 +6,6 @@ const app = express();
 //TODO:Env variables
 
 //TODO:importing routes
-// const { api } = './routes/api';
 import { api } from './routes/api';
 
 //TODO:importing errorHandlelers
