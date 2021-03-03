@@ -3,7 +3,7 @@ import timestampToDate from '../../utils/timestampToDate';
 module.exports = {
   Sobrecalentamiento: {
     //here you place the parameters of the query in order to parse it
-    horaFecha: async ({ fecha_hora }) => {
+    fecha_hora: async ({ fecha_hora }) => {
       //parsing timestamp to date and to string
       const stringDate: String = timestampToDate({ fecha_hora });
       //   console.log('probando que lleguen parametros', fecha_hora);
@@ -11,13 +11,13 @@ module.exports = {
     },
   },
   EficienciaDeTrabajo: {
-    horaFecha: async ({ fecha_hora }) => {
+    fecha_hora: async ({ fecha_hora }) => {
       //parsing timestamp to date and to string
       const stringDate: String = timestampToDate({ fecha_hora });
       return stringDate;
     },
   },
-  Tiendas: {
+  Tienda: {
     ubicacion: async ({ ubicacion }) => {
       //parsing GeoPoint to stringify
       const stringGeoPoint: String = JSON.stringify(ubicacion);

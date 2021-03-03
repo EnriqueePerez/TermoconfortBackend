@@ -1,15 +1,17 @@
 type Query {
   "Retorna todos los sobrecalentamientos"
-  getSobrecalentamientos: Sobrecalentamiento #agregar corchetes para convertir a array cuando se introduzcan mas datos
+  getSobrecalentamientos: [Sobrecalentamiento] #agregar corchetes para convertir a array cuando se introduzcan mas datos
   "Retorna todos las eficiencias de trabajo"
-  getEficienciasDeTrabajo: EficienciaDeTrabajo #agregar corchetes para convertir a array cuando se introduzcan mas datos
+  getEficienciasDeTrabajo: [EficienciaDeTrabajo]
   "Retorna todas las tiendas"
-  getTiendas: Tiendas #agregar corchetes para convertir a array cuando se introduzcan mas datos
+  getTiendas: [Tienda] #agregar corchetes para convertir a array cuando se introduzcan mas datos
+  "Retornas todos los usuarios"
+  getUsuarios: [Usuario]
 }
 
 type Sobrecalentamiento {
   id: ID
-  horaFecha: String
+  fecha_hora: String
   CR: String
   id_usuario: Int
   unidad: String
@@ -28,7 +30,7 @@ type Sobrecalentamiento {
 
 type EficienciaDeTrabajo {
   id: ID
-  horaFecha: String
+  fecha_hora: String
   CR: String
   id_usuario: Int
   unidad: String
@@ -45,16 +47,15 @@ type EficienciaDeTrabajo {
   comentarios: String
 }
 
-type Tiendas {
+type Tienda {
   id: ID
   nombre: String
   ciudad: String
   ubicacion: String
 }
 
-type Usuarios {
+type Usuario {
   id: ID
-  id_usuario: Int
   nombre: String
   apellido: String
   email: String
