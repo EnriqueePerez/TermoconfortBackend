@@ -1,5 +1,5 @@
-const { config } = require('../../dotenv');
-const admin = require('firebase-admin');
+import { config } from '../../dotenv';
+import admin from 'firebase-admin';
 
 let connection: any;
 
@@ -9,7 +9,9 @@ export async function connectDB() {
   try {
     //Connecting to db
     admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(config.firebaseCredentials)),
+      credential: admin.credential.cert(
+        JSON.parse(config.firebaseCredentials as string)
+      ),
     });
 
     connection = admin.firestore();

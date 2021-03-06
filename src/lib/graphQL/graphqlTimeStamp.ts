@@ -1,47 +1,70 @@
-import { Kind } from 'graphql/language';
-import { GraphQLScalarType } from 'graphql';
+import { Kind, GraphQLError, GraphQLScalarType, ValueNode } from 'graphql';
+import firebase from 'firebase-admin';
+const { Timestamp } = firebase.firestore;
 
-function serializeDate(value: any) {
-  if (value instanceof Date) {
-    return value.getTime();
-  } else if (typeof value === 'number') {
-    return Math.trunc(value);
-  } else if (typeof value === 'string') {
-    return Date.parse(value);
-  }
-  return null;
-}
-
-function parseDate(value: any) {
-  if (value === null) {
-    return null;
-  }
-
-  try {
-    return new Date(value);
-  } catch (err) {
-    return null;
-  }
-}
-
-function parseDateFromLiteral(ast: any) {
-  if (ast.kind === Kind.INT) {
-    const num = parseInt(ast.value, 10);
-    return new Date(num);
-  } else if (ast.kind === Kind.STRING) {
-    return parseDate(ast.value);
-  }
-  return null;
-}
-
-const TimestampType = new GraphQLScalarType({
+export const TimestampType = new GraphQLScalarType({
   name: 'Timestamp',
-  description:
-    'The javascript `Date` as integer. Type represents date and time ' +
-    'as number of milliseconds from start of UNIX epoch.',
-  serialize: serializeDate,
-  parseValue: parseDate,
-  parseLiteral: parseDateFromLiteral,
-});
 
-export default TimestampType;
+  description:
+    'Personal Timestamp Scalar Type. It receives a Date object and it converts in a Firestore Timestamp',
+
+  serialize(value) {
+    let v = value;
+
+    if (
+      !(v instanceof Timestamp) &&
+      typeof v !== 'object' &&
+      typeof v.toDate === 'function' &&
+      typeof v !== 'string' &&
+      typeof v !== 'number'
+    ) {
+      throw new TypeError(
+        `Value is not an instance of Date, Date string or number: ${JSON.stringify(
+          v
+        )}`
+      );
+    }
+
+    if (typeof v === 'string') {
+      const date = new Date();
+      date.setTime(Date.parse(value));
+      try {
+        v = Timestamp.fromDate(date);
+      } catch (e) {
+        throw new TypeError(`Value is not a valid Date: ${JSON.stringify(v)}`);
+      }
+    } else if (typeof v === 'number') {
+      v = Timestamp.fromMillis(v);
+    }
+
+    if (Number.isNaN(v.seconds)) {
+      throw new TypeError(`Value is not a valid Date: ${JSON.stringify(v)}`);
+    }
+
+    return v.toDate();
+  },
+
+  parseValue(value: string) {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      throw new GraphQLError(
+        `Value is not a valid Date: ${JSON.stringify(value)}`
+      );
+    }
+
+    return Timestamp.fromDate(date);
+  },
+
+  parseLiteral(ast: ValueNode) {
+    if (ast.kind === Kind.INT) {
+      return Timestamp.fromDate(new Date(parseInt(ast.value, 10)));
+    } else if (ast.kind === Kind.STRING) {
+      if (this.parseValue) {
+        return this.parseValue(ast.value);
+      }
+    }
+
+    return null;
+  },
+});

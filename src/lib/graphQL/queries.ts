@@ -1,6 +1,6 @@
-const { connectDB } = require('../db/dbConnection');
+import { connectDB } from '../db/dbConnection';
 
-module.exports = {
+export = {
   getSobrecalentamientos: async () => {
     let sobrecalentamientos: String[] = [];
     try {
@@ -19,6 +19,7 @@ module.exports = {
     } catch (error) {
       console.log('error en getSobrecalentamientos', error);
     }
+    console.log(sobrecalentamientos);
     return sobrecalentamientos;
   },
   getEficienciasDeTrabajo: async () => {

@@ -1,27 +1,16 @@
-import timestampToDate from '../../utils/timestampToDate';
+import { GeoPoint } from '@google-cloud/firestore';
 
-module.exports = {
-  Sobrecalentamiento: {
-    //here you place the parameters of the query in order to parse it
-    fecha_hora: async ({ fecha_hora }) => {
-      //parsing timestamp to date and to string
-      const stringDate: String = timestampToDate({ fecha_hora });
-      //   console.log('probando que lleguen parametros', fecha_hora);
-      return stringDate;
-    },
-  },
-  EficienciaDeTrabajo: {
-    fecha_hora: async ({ fecha_hora }) => {
-      //parsing timestamp to date and to string
-      const stringDate: String = timestampToDate({ fecha_hora });
-      return stringDate;
-    },
-  },
+export = {
   Tienda: {
     ubicacion: async ({ ubicacion }) => {
+      const latitude = ubicacion.latitude;
+      const longitude = ubicacion.longitude;
+
+      const parsedGeoPoint = new GeoPoint(latitude, longitude);
+      console.log(parsedGeoPoint);
       //parsing GeoPoint to stringify
-      const stringGeoPoint: String = JSON.stringify(ubicacion);
-      return stringGeoPoint;
+      // const stringGeoPoint: String = JSON.stringify(ubicacion);
+      return parsedGeoPoint;
     },
   },
 };

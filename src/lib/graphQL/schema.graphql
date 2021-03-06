@@ -1,3 +1,5 @@
+scalar Timestamp
+
 type Query {
   "Retorna todos los sobrecalentamientos"
   getSobrecalentamientos: [Sobrecalentamiento] #agregar corchetes para convertir a array cuando se introduzcan mas datos
@@ -9,9 +11,16 @@ type Query {
   getUsuarios: [Usuario]
 }
 
+type Mutation {
+  "Agrega un nuevo sobrecalentamiento"
+  addSobrecalentamiento(input: SobrecalentamientoInput!): Sobrecalentamiento
+  "Agrega una nueva eficiencia de trabajo"
+  addEficienciaDeTrabajo(input: EficienciaDeTrabajoInput!): EficienciaDeTrabajo
+}
+
 type Sobrecalentamiento {
   id: ID
-  fecha_hora: String
+  fecha_hora: Timestamp
   CR: String
   id_usuario: Int
   unidad: String
@@ -28,9 +37,27 @@ type Sobrecalentamiento {
   comentarios: String
 }
 
+input SobrecalentamientoInput {
+  fecha_hora: Timestamp!
+  CR: String!
+  id_usuario: Int!
+  unidad: String!
+  refrigerante: String!
+  presion_arranque: Float!
+  presion_paro: Float!
+  presion_succion: Float!
+  resistencia_pt1000: Float!
+  temp_tubo: Float!
+  temp_saturacion: Float!
+  temp_sobrecalentamiento: Float!
+  temp_ambiente: Float!
+  aprobado: String!
+  comentarios: String
+}
+
 type EficienciaDeTrabajo {
   id: ID
-  fecha_hora: String
+  fecha_hora: Timestamp
   CR: String
   id_usuario: Int
   unidad: String
@@ -47,11 +74,34 @@ type EficienciaDeTrabajo {
   comentarios: String
 }
 
+input EficienciaDeTrabajoInput {
+  fecha_hora: Timestamp!
+  CR: String!
+  id_usuario: Int!
+  unidad: String!
+  retorno: Float!
+  inyeccion: Float!
+  retorno2: Float
+  inyeccion2: Float
+  porcentaje_evaporador: Float!
+  ciclos_evaporador: Float!
+  porcentaje_condensador: Float!
+  ciclos_condensador: Float!
+  delta: Float!
+  aprobado: String!
+  comentarios: String
+}
+
+type GeoPoint {
+  latitude: Float
+  longitude: Float
+}
+
 type Tienda {
   id: ID
   nombre: String
   ciudad: String
-  ubicacion: String
+  ubicacion: GeoPoint
 }
 
 type Usuario {

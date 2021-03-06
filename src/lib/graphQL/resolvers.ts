@@ -1,7 +1,11 @@
-const queries = require('./queries');
-const specialTypes = require('./specialTypesResolvers');
+import queries from './queries';
+import mutations from './mutations';
+import specialTypes from './specialTypesResolvers';
+import { TimestampType } from './graphqlTimeStamp';
 
-module.exports = {
+export = {
   Query: queries,
+  Mutation: mutations,
+  Timestamp: TimestampType,
   ...specialTypes,
 };

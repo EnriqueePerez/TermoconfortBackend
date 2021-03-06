@@ -1,4 +1,4 @@
-const firebase = require('firebase-admin');
+import firebase from 'firebase-admin';
 const { Timestamp } = firebase.firestore;
 
 export default function timestampToDate({ fecha_hora }): String {
