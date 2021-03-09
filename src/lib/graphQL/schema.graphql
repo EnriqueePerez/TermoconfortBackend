@@ -16,6 +16,10 @@ type Mutation {
   addSobrecalentamiento(input: SobrecalentamientoInput!): Sobrecalentamiento
   "Agrega una nueva eficiencia de trabajo"
   addEficienciaDeTrabajo(input: EficienciaDeTrabajoInput!): EficienciaDeTrabajo
+  "Agrega una nueva tienda"
+  addTienda(input: TiendaInput!): Tienda
+  "Agrega un nuevo usuario, recuerda que solo se agrega el usuario en db, ademas es necesario registrarlo en Firebase Auth"
+  addUsuario(input: UsuarioInput!): Usuario
 }
 
 type Sobrecalentamiento {
@@ -34,24 +38,6 @@ type Sobrecalentamiento {
   temp_sobrecalentamiento: Float
   temp_ambiente: Float
   aprobado: String
-  comentarios: String
-}
-
-input SobrecalentamientoInput {
-  fecha_hora: Timestamp!
-  CR: String!
-  id_usuario: Int!
-  unidad: String!
-  refrigerante: String!
-  presion_arranque: Float!
-  presion_paro: Float!
-  presion_succion: Float!
-  resistencia_pt1000: Float!
-  temp_tubo: Float!
-  temp_saturacion: Float!
-  temp_sobrecalentamiento: Float!
-  temp_ambiente: Float!
-  aprobado: String!
   comentarios: String
 }
 
@@ -74,24 +60,6 @@ type EficienciaDeTrabajo {
   comentarios: String
 }
 
-input EficienciaDeTrabajoInput {
-  fecha_hora: Timestamp!
-  CR: String!
-  id_usuario: Int!
-  unidad: String!
-  retorno: Float!
-  inyeccion: Float!
-  retorno2: Float
-  inyeccion2: Float
-  porcentaje_evaporador: Float!
-  ciclos_evaporador: Float!
-  porcentaje_condensador: Float!
-  ciclos_condensador: Float!
-  delta: Float!
-  aprobado: String!
-  comentarios: String
-}
-
 type GeoPoint {
   latitude: Float
   longitude: Float
@@ -110,4 +78,60 @@ type Usuario {
   apellido: String
   email: String
   permisos: [String]
+}
+
+input SobrecalentamientoInput {
+  fecha_hora: Timestamp!
+  CR: String!
+  id_usuario: Int!
+  unidad: String!
+  refrigerante: String!
+  presion_arranque: Float!
+  presion_paro: Float!
+  presion_succion: Float!
+  resistencia_pt1000: Float!
+  temp_tubo: Float!
+  temp_saturacion: Float!
+  temp_sobrecalentamiento: Float!
+  temp_ambiente: Float!
+  aprobado: String!
+  comentarios: String
+}
+
+input EficienciaDeTrabajoInput {
+  fecha_hora: Timestamp!
+  CR: String!
+  id_usuario: Int!
+  unidad: String!
+  retorno: Float!
+  inyeccion: Float!
+  retorno2: Float
+  inyeccion2: Float
+  porcentaje_evaporador: Float!
+  ciclos_evaporador: Float!
+  porcentaje_condensador: Float!
+  ciclos_condensador: Float!
+  delta: Float!
+  aprobado: String!
+  comentarios: String
+}
+
+input GeoPointInput {
+  latitude: Float!
+  longitude: Float!
+}
+
+input TiendaInput {
+  id: ID!
+  nombre: String!
+  ciudad: String!
+  ubicacion: GeoPointInput
+}
+
+input UsuarioInput {
+  id: ID!
+  nombre: String!
+  apellido: String!
+  email: String!
+  permisos: [String]!
 }
