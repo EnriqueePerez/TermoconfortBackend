@@ -22,6 +22,51 @@ export = {
     console.log(sobrecalentamientos);
     return sobrecalentamientos;
   },
+  getSobrecalentamientoForValidation: async (
+    root,
+    { storeCR, unit, collection }
+  ) => {
+    let sobrecalentamiento = {};
+    const getStartAndEndDate = () => {
+      const today = new Date();
+      const month = today.getMonth();
+      const year = today.getFullYear();
+      const start = new Date(year, month, 1);
+      const end = new Date(year, month + 1, 1);
+      console.log('today', today);
+      console.log('month', month);
+      console.log('year', year);
+      console.log('start', start);
+      console.log('end', end);
+      return { start, end };
+    };
+    try {
+      const db = await connectDB();
+      //filtering the search by CR, unit and date
+      const data = await db
+        .collection(collection)
+        .where('CR', '==', storeCR)
+        .where('unidad', '==', unit)
+        .where('fecha_hora', '>=', getStartAndEndDate().start)
+        .where('fecha_hora', '<', getStartAndEndDate().end)
+        .get();
+      //validating if data is not empty
+      if (data.empty) {
+        throw new Error('SOBRECALENTAMIENTO_NOT_FOUND');
+      } else {
+        data.forEach((doc: any) => {
+          let id = doc.id;
+          let info = doc.data();
+
+          sobrecalentamiento = { ...info, id };
+          // console.log('sobrecalntamiento', sobrecalentamiento);
+        });
+      }
+    } catch (error) {
+      console.log('error en getSobrecalentamientoForValidation', error);
+    }
+    return sobrecalentamiento;
+  },
   getEficienciasDeTrabajo: async () => {
     let eficienciasDeTrabajo: String[] = [];
     try {
@@ -72,5 +117,30 @@ export = {
       console.log('error en getUsuarios', error);
     }
     return usuarios;
+  },
+  getUsuario: async (root, { email }) => {
+    let usuario = {};
+    try {
+      const db = await connectDB();
+      //searching user by email
+      const data = await db
+        .collection('Usuarios')
+        .where('email', '==', email)
+        .get();
+
+      if (data.empty) {
+        throw new Error('USER_NOT_FOUND');
+      } else {
+        data.forEach((doc: any) => {
+          let id = doc.id;
+          let info = doc.data();
+
+          usuario = { ...info, id };
+        });
+      }
+    } catch (error) {
+      console.error('error en getUsuario', error);
+    }
+    return usuario;
   },
 };

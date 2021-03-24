@@ -1,12 +1,14 @@
 import { connectDB } from '../db/dbConnection';
 import firebase from 'firebase-admin';
-const { GeoPoint } = firebase.firestore;
+const { GeoPoint, Timestamp } = firebase.firestore;
 
 export = {
-  addSobrecalentamiento: async (root: any, { input }) => {
+  addSobrecalentamiento: async (root: any, { input, collection }) => {
     //default data since some params are optional
+    const now = Timestamp.fromDate(new Date());
     const defaults = {
       comentarios: '',
+      fecha_hora: now,
     };
     // if comentarios is not in input, then add a empty string
     let newSobrecalentamiento = Object.assign(defaults, input);
@@ -16,7 +18,7 @@ export = {
       //connecting to db and adding the data
       const db = await connectDB();
       const newData = await db
-        .collection('sobrecalentamientos')
+        .collection(collection)
         .add(newSobrecalentamiento);
 
       //saving the data id
@@ -25,7 +27,30 @@ export = {
       console.log('error en addSobrecalentamiento', error);
     }
     //returning the introduced data with its id
-    return { ...input, ...id };
+    return { ...newSobrecalentamiento, ...id };
+  },
+  updateSobrecalentamiento: async (root: any, { input, collection, id }) => {
+    //default data since some params are optional
+    const now = Timestamp.fromDate(new Date());
+    const defaults = {
+      comentarios: '',
+      fecha_hora: now,
+    };
+    // if comentarios is not in input, then add a empty string
+    let updatedSobrecalentamiento = Object.assign(defaults, input);
+
+    try {
+      //connecting to db and adding the data
+      const db = await connectDB();
+      const newData = await db
+        .collection(collection)
+        .doc(id)
+        .update(updatedSobrecalentamiento);
+    } catch (error) {
+      console.log('error en addSobrecalentamiento', error);
+    }
+    //returning the introduced data with its id
+    return { ...updatedSobrecalentamiento, id };
   },
   addEficienciaDeTrabajo: async (root: any, { input }) => {
     const defaults = {
