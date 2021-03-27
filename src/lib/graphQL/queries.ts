@@ -83,6 +83,48 @@ export = {
     }
     return eficienciasDeTrabajo;
   },
+  getEficienciaDeTrabajoForValidation: async (root, { storeCR, unit }) => {
+    let eficienciaDeTrabajo = {};
+    const getStartAndEndDate = () => {
+      const today = new Date();
+      const month = today.getMonth();
+      const year = today.getFullYear();
+      const start = new Date(year, month, 1);
+      const end = new Date(year, month + 1, 1);
+      // console.log('today', today);
+      // console.log('month', month);
+      // console.log('year', year);
+      // console.log('start', start);
+      // console.log('end', end);
+      return { start, end };
+    };
+    try {
+      const db = await connectDB();
+      //filtering the search by CR, unit and date
+      const data = await db
+        .collection('EficienciaDeTrabajo')
+        .where('CR', '==', storeCR)
+        .where('unidad', '==', unit)
+        .where('fecha_hora', '>=', getStartAndEndDate().start)
+        .where('fecha_hora', '<', getStartAndEndDate().end)
+        .get();
+      //validating if data is not empty
+      if (data.empty) {
+        throw new Error('EFICIENCIA_DE_TRABAJO_NOT_FOUND');
+      } else {
+        data.forEach((doc: any) => {
+          let id = doc.id;
+          let info = doc.data();
+
+          eficienciaDeTrabajo = { ...info, id };
+          // console.log('sobrecalntamiento', sobrecalentamiento);
+        });
+      }
+    } catch (error) {
+      console.log('error en getEficienciaDeTrabajoForValidation', error);
+    }
+    return eficienciaDeTrabajo;
+  },
   getTiendas: async () => {
     let tiendas: String[] = [];
     try {

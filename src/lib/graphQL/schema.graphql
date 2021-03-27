@@ -11,6 +11,11 @@ type Query {
   ): Sobrecalentamiento
   "Retorna todos las eficiencias de trabajo"
   getEficienciasDeTrabajo: [EficienciaDeTrabajo]
+  "Retorna una eficienca de trabajo de acuerdo al mes, año, tienda y unidad"
+  getEficienciaDeTrabajoForValidation(
+    storeCR: String!
+    unit: String!
+  ): EficienciaDeTrabajo
   "Retorna todas las tiendas"
   getTiendas: [Tienda] #agregar corchetes para convertir a array cuando se introduzcan mas datos
   "Retornas todos los usuarios"
@@ -33,6 +38,11 @@ type Mutation {
   ): Sobrecalentamiento
   "Agrega una nueva eficiencia de trabajo"
   addEficienciaDeTrabajo(input: EficienciaDeTrabajoInput!): EficienciaDeTrabajo
+  "Actauliza una eficiencia de trabajo existente"
+  updateEficienciaDeTrabajo(
+    input: EficienciaDeTrabajoInput!
+    id: String!
+  ): EficienciaDeTrabajo
   "Agrega una nueva tienda"
   addTienda(input: TiendaInput!): Tienda
   "Agrega un nuevo usuario, recuerda que solo se agrega el usuario en db, ademas es necesario registrarlo en Firebase Auth"
@@ -116,7 +126,7 @@ input SobrecalentamientoInput {
 }
 
 input EficienciaDeTrabajoInput {
-  fecha_hora: Timestamp!
+  # fecha_hora: Timestamp!
   CR: String!
   id_usuario: Int!
   unidad: String!

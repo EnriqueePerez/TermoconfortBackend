@@ -47,14 +47,16 @@ export = {
         .doc(id)
         .update(updatedSobrecalentamiento);
     } catch (error) {
-      console.log('error en addSobrecalentamiento', error);
+      console.log('error en updateSobrecalentamiento', error);
     }
     //returning the introduced data with its id
     return { ...updatedSobrecalentamiento, id };
   },
   addEficienciaDeTrabajo: async (root: any, { input }) => {
+    const now = Timestamp.fromDate(new Date());
     const defaults = {
       comentarios: '',
+      fecha_hora: now,
     };
 
     let newEficienciaDeTrabajo = Object.assign(defaults, input);
@@ -71,6 +73,29 @@ export = {
       console.log('error en addEficienciaDeTrabajo', error);
     }
     return { ...input, ...id };
+  },
+  updateEficienciaDeTrabajo: async (root: any, { input, collection, id }) => {
+    //default data since some params are optional
+    const now = Timestamp.fromDate(new Date());
+    const defaults = {
+      comentarios: '',
+      fecha_hora: now,
+    };
+    // if comentarios is not in input, then add a empty string
+    let updatedEficienciaDeTrabajo = Object.assign(defaults, input);
+
+    try {
+      //connecting to db and adding the data
+      const db = await connectDB();
+      const newData = await db
+        .collection('EficienciaDeTrabajo')
+        .doc(id)
+        .update(updatedEficienciaDeTrabajo);
+    } catch (error) {
+      console.log('error en updateEficienciaDeTrabajo', error);
+    }
+    //returning the introduced data with its id
+    return { ...updatedEficienciaDeTrabajo, id };
   },
   addTienda: async (root: any, { input }) => {
     let newTienda = {
