@@ -13,7 +13,7 @@ import { api } from './routes/api';
 //config cors
 app.use(
   cors({
-    origin: config.frontendUrl,
+    origin: '*',
     // credentials: true //enable when auth is ready
   })
 );
