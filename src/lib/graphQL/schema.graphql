@@ -46,7 +46,7 @@ type Mutation {
   "Agrega una nueva tienda"
   addTienda(input: TiendaInput!): Tienda
   "Agrega un nuevo usuario, recuerda que solo se agrega el usuario en db, ademas es necesario registrarlo en Firebase Auth"
-  addUsuario(input: UsuarioInput!): Usuario
+  addUsuario(input: UsuarioInput!): CreatedUsuario
 }
 
 type Sobrecalentamiento {
@@ -104,7 +104,16 @@ type Usuario {
   nombre: String
   apellido: String
   email: String
-  permisos: [String]
+  rol: String
+}
+
+type CreatedUsuario {
+  id: ID
+  nombre: String
+  apellido: String
+  email: String
+  rol: String
+  password: String
 }
 
 input SobrecalentamientoInput {
@@ -160,5 +169,5 @@ input UsuarioInput {
   nombre: String!
   apellido: String!
   email: String!
-  permisos: [String]!
+  rol: String!
 }

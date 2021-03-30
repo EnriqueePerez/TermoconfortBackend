@@ -1,3 +1,4 @@
+import { Application } from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import { loadFile } from 'graphql-import-files';
@@ -5,7 +6,7 @@ import { loadFile } from 'graphql-import-files';
 const typeDefs = loadFile('./src/lib/graphQL/schema.graphql');
 import resolvers from '../lib/graphQL/resolvers';
 
-export function api(app: any): any {
+export function api(app: Application) {
   app.use(
     '/api',
     graphqlHTTP({

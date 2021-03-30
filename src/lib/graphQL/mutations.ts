@@ -1,9 +1,10 @@
-import { connectDB } from '../db/dbConnection';
+import { connectAuth, connectDB } from '../db/dbConnection';
 import firebase from 'firebase-admin';
+import { createPassword } from '../../utils/createPassword';
 const { GeoPoint, Timestamp } = firebase.firestore;
 
 export = {
-  addSobrecalentamiento: async (root: any, { input, collection }) => {
+  addSobrecalentamiento: async (root, { input, collection }) => {
     //default data since some params are optional
     const now = Timestamp.fromDate(new Date());
     const defaults = {
@@ -129,19 +130,31 @@ export = {
       nombre: input.nombre,
       apellido: input.apellido,
       email: input.email,
-      permisos: input.permisos,
+      rol: input.rol,
     };
     //adding default data in case it is not existant
     let id = { id: 'sinId' };
+    let newPassword = createPassword();
 
     try {
       const db = await connectDB();
       await db.collection('Usuarios').doc(`${input.id}`).set(newUsuario);
 
-      id.id = input.id;
+      const auth = await connectAuth();
+      await auth
+        .createUser({
+          uid: input.id,
+          email: newUsuario.email,
+          emailVerified: true,
+          displayName: newUsuario.nombre,
+          password: newPassword,
+        })
+        .then((userRecord) => {
+          id.id = userRecord.uid;
+        });
     } catch (error) {
       console.error('error en addUsuario', error);
     }
-    return { ...newUsuario, ...id };
+    return { ...newUsuario, ...id, password: newPassword };
   },
 };
