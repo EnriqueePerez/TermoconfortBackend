@@ -19,7 +19,7 @@ export = {
     } catch (error) {
       console.log('error en getSobrecalentamientos', error);
     }
-    console.log(sobrecalentamientos);
+    // console.log(sobrecalentamientos);
     return sobrecalentamientos;
   },
   getSobrecalentamientoForValidation: async (
@@ -33,11 +33,11 @@ export = {
       const year = today.getFullYear();
       const start = new Date(year, month, 1);
       const end = new Date(year, month + 1, 1);
-      console.log('today', today);
-      console.log('month', month);
-      console.log('year', year);
-      console.log('start', start);
-      console.log('end', end);
+      // console.log('today', today);
+      // console.log('month', month);
+      // console.log('year', year);
+      // console.log('start', start);
+      // console.log('end', end);
       return { start, end };
     };
     try {
