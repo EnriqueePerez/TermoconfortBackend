@@ -1,10 +1,10 @@
 //Basic express server
-const express = require('express');
+import express from 'express';
 const cors = require('cors');
 const app = express();
 
 //Env variables
-const { config } = require('./dotenv');
+import { config } from './dotenv';
 //importing routes
 import { api } from './routes/api';
 
@@ -13,7 +13,7 @@ import { api } from './routes/api';
 //config cors
 app.use(
   cors({
-    origin: 'http://localhost:8080',
+    origin: config.frontendUrl,
     // credentials: true //enable when auth is ready
   })
 );
