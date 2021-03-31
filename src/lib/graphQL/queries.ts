@@ -129,7 +129,7 @@ export = {
     let tiendas: String[] = [];
     try {
       const db = await connectDB();
-      const data = await db.collection('Tiendas').get();
+      const data = await db.collection('Tiendas').orderBy('nombre').get();
       data.forEach((doc: any) => {
         let id = doc.id;
         let info = doc.data();
