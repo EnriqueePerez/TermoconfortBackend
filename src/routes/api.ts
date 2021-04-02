@@ -1,4 +1,4 @@
-import { Application } from 'express';
+import { Application, Request, Response } from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import { loadFile } from 'graphql-import-files';
@@ -15,4 +15,8 @@ export function api(app: Application) {
       graphiql: process.env.NODE_ENV !== 'production',
     })
   );
+
+  app.get('/sleep', (req: Request, res: Response) => {
+    res.status(200).json({ sleep: 'I am awake' });
+  });
 }

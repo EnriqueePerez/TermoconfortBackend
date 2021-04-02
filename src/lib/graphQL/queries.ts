@@ -49,6 +49,7 @@ export = {
         .where('unidad', '==', unit)
         .where('fecha_hora', '>=', getStartAndEndDate().start)
         .where('fecha_hora', '<', getStartAndEndDate().end)
+        .limit(1)
         .get();
       //validating if data is not empty
       if (data.empty) {
@@ -107,6 +108,7 @@ export = {
         .where('unidad', '==', unit)
         .where('fecha_hora', '>=', getStartAndEndDate().start)
         .where('fecha_hora', '<', getStartAndEndDate().end)
+        .limit(1)
         .get();
       //validating if data is not empty
       if (data.empty) {
@@ -168,6 +170,7 @@ export = {
       const data = await db
         .collection('Usuarios')
         .where('email', '==', email)
+        .limit(1)
         .get();
 
       if (data.empty) {
