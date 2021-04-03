@@ -1,6 +1,7 @@
 import { connectAuth, connectDB } from '../db/dbConnection';
 import firebase from 'firebase-admin';
 import { createPassword } from '../../utils/createPassword';
+import { createId } from '../../utils/createId';
 const { GeoPoint, Timestamp } = firebase.firestore;
 
 export = {
@@ -13,22 +14,20 @@ export = {
     };
     // if comentarios is not in input, then add a empty string
     let newSobrecalentamiento = Object.assign(defaults, input);
-    let id = { id: 'sinId' };
+    let id = createId(input.CR, input.unidad, 'SH', collection);
 
     try {
       //connecting to db and adding the data
       const db = await connectDB();
       const newData = await db
         .collection(collection)
-        .add(newSobrecalentamiento);
-
-      //saving the data id
-      id.id = newData.id;
+        .doc(id)
+        .set(newSobrecalentamiento);
     } catch (error) {
       console.log('error en addSobrecalentamiento', error);
     }
     //returning the introduced data with its id
-    return { ...newSobrecalentamiento, ...id };
+    return { ...newSobrecalentamiento, id };
   },
   updateSobrecalentamiento: async (root: any, { input, collection, id }) => {
     //default data since some params are optional
@@ -61,21 +60,20 @@ export = {
     };
 
     let newEficienciaDeTrabajo = Object.assign(defaults, input);
-    let id = { id: 'sinId' };
+    let id = createId(input.CR, input.unidad, 'ET');
 
     try {
       const db = await connectDB();
       const newData = await db
         .collection('EficienciaDeTrabajo')
-        .add(newEficienciaDeTrabajo);
-
-      id.id = newData.id;
+        .doc(id)
+        .set(newEficienciaDeTrabajo);
     } catch (error) {
       console.log('error en addEficienciaDeTrabajo', error);
     }
-    return { ...input, ...id };
+    return { ...input, id };
   },
-  updateEficienciaDeTrabajo: async (root: any, { input, collection, id }) => {
+  updateEficienciaDeTrabajo: async (root: any, { input, id }) => {
     //default data since some params are optional
     const now = Timestamp.fromDate(new Date());
     const defaults = {
