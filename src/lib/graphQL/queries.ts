@@ -7,7 +7,11 @@ export = {
       //connecting to the db
       const db = await connectDB();
       //getting all the collection and saving it in the array
-      const data = await db.collection('sobrecalentamientos').get();
+      const data = await db
+        .collection('sobrecalentamientos')
+        .orderBy('fecha_hora', 'desc')
+        .limit(150)
+        .get();
       data.forEach((doc: any) => {
         let id = doc.id;
         let info = doc.data();
@@ -72,7 +76,11 @@ export = {
     let eficienciasDeTrabajo: String[] = [];
     try {
       const db = await connectDB();
-      const data = await db.collection('EficienciaDeTrabajo').get();
+      const data = await db
+        .collection('EficienciaDeTrabajo')
+        .orderBy('fecha_hora', 'desc')
+        .limit(220)
+        .get();
       data.forEach((doc: any) => {
         let id = doc.id;
         let info = doc.data();
