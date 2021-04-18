@@ -1,15 +1,19 @@
 scalar Timestamp
 
 type Query {
-  "Retorna todos los sobrecalentamientos"
-  getSobrecalentamientos: [Sobrecalentamiento] #agregar corchetes para convertir a array cuando se introduzcan mas datos
+  "Retorna todos sobrecalentamientos con formato para csv o excel"
+  getSobrecalentamientosForCsv: [SobrecalentamientoForCsv]
+  "Retorna los ultimos 150 sobrecalentamientos"
+  getSobrecalentamientos: [Sobrecalentamiento]
   "Retorna un sobrecalentamiento de acuerdo al mes, año, tienda y unidad"
   getSobrecalentamientoForValidation(
     storeCR: String!
     unit: String!
     collection: String!
   ): Sobrecalentamiento
-  "Retorna todos las eficiencias de trabajo"
+  "Retorna todos las eficiencias de trabajo con formato para csv o excel"
+  getEficienciasDeTrabajoForCsv: [EficienciaDeTrabajoForCsv]
+  "Retorna las ultimos 200 eficiencias de trabajo"
   getEficienciasDeTrabajo: [EficienciaDeTrabajo]
   "Retorna una eficienca de trabajo de acuerdo al mes, año, tienda y unidad"
   getEficienciaDeTrabajoForValidation(
@@ -70,11 +74,55 @@ type Sobrecalentamiento {
   comentarios: String
 }
 
+type SobrecalentamientoForCsv {
+  id: ID
+  fecha: String
+  hora: String
+  CR: String
+  tienda: String
+  id_usuario: Int
+  nombre_usuario: String
+  unidad: String
+  refrigerante: String
+  presion_arranque: Float
+  presion_paro: Float
+  presion_succion: Float
+  resistencia_pt1000: Float
+  temp_tubo: Float
+  temp_saturacion: Float
+  temp_sobrecalentamiento: Float
+  temp_ambiente: Float
+  aprobado: String
+  comentarios: String
+}
+
 type EficienciaDeTrabajo {
   id: ID
   fecha_hora: Timestamp
   CR: String
   tienda: String!
+  id_usuario: Int
+  nombre_usuario: String
+  unidad: String
+  retorno: Float
+  inyeccion: Float
+  retorno2: Float
+  inyeccion2: Float
+  porcentaje_evaporador: Float
+  ciclos_evaporador: Float
+  porcentaje_condensador: Float
+  ciclos_condensador: Float
+  delta: Float
+  aprobado: String
+  comentarios: String
+}
+
+type EficienciaDeTrabajoForCsv {
+  id: ID
+  fecha: String
+  hora: String
+  CR: String
+  tienda: String
   id_usuario: Int
   nombre_usuario: String
   unidad: String

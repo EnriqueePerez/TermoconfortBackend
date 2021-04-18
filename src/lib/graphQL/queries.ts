@@ -1,6 +1,35 @@
 import { connectDB } from '../db/dbConnection';
+import { parseSobrecalentamientoForCsv } from '../../utils/parseSobrecalentamientoForCsv';
 
 export = {
+  getSobrecalentamientosForCsv: async () => {
+    let sobrecalentamientos: String[] = [];
+    try {
+      //connecting to the db
+      const db = await connectDB();
+      //getting all the collection and saving it in the array
+      //TODO: add filter to get sobrecalentamientos between 2 dates
+      const data = await db
+        .collection('sobrecalentamientos')
+        .orderBy('fecha_hora', 'desc')
+        .get();
+      data.forEach((doc: any) => {
+        let id = doc.id;
+        let info = doc.data();
+        const { time, date } = parseSobrecalentamientoForCsv(
+          doc.data().fecha_hora
+        );
+
+        //saving the actual data in the array
+        sobrecalentamientos.push({ id, ...info, fecha: date, hora: time });
+        // console.log(doc.id, '=>', doc.data());
+      });
+    } catch (error) {
+      console.log('error en getSobrecalentamientos', error);
+    }
+    // console.log(sobrecalentamientos);
+    return sobrecalentamientos;
+  },
   getSobrecalentamientos: async () => {
     let sobrecalentamientos: String[] = [];
     try {
@@ -71,6 +100,29 @@ export = {
       console.log('error en getSobrecalentamientoForValidation', error);
     }
     return sobrecalentamiento;
+  },
+  getEficienciasDeTrabajoForCsv: async () => {
+    let eficienciasDeTrabajo: String[] = [];
+    try {
+      const db = await connectDB();
+      //TODO: add filter to get sobrecalentamientos between 2 dates
+      const data = await db
+        .collection('EficienciaDeTrabajo')
+        .orderBy('fecha_hora', 'desc')
+        .get();
+      data.forEach((doc: any) => {
+        let id = doc.id;
+        let info = doc.data();
+        const { time, date } = parseSobrecalentamientoForCsv(
+          doc.data().fecha_hora
+        );
+        //Saving the data in the array
+        eficienciasDeTrabajo.push({ id, ...info, fecha: date, hora: time });
+      });
+    } catch (error) {
+      console.log('error en getEficienciasDeTrabajo', error);
+    }
+    return eficienciasDeTrabajo;
   },
   getEficienciasDeTrabajo: async () => {
     let eficienciasDeTrabajo: String[] = [];
