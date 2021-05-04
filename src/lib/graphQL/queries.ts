@@ -2,15 +2,23 @@ import { connectDB } from '../db/dbConnection';
 import { parseSobrecalentamientoForCsv } from '../../utils/parseSobrecalentamientoForCsv';
 
 export = {
-  getSobrecalentamientosForCsv: async () => {
+  getSobrecalentamientosForCsv: async (
+    root,
+    { startYear, startMonth, startDay, endYear, endMonth, endDay }
+  ) => {
     let sobrecalentamientos: String[] = [];
     try {
       //connecting to the db
       const db = await connectDB();
       //getting all the collection and saving it in the array
       //TODO: add filter to get sobrecalentamientos between 2 dates
+
+      const startDate = new Date(startYear, startMonth, startDay);
+      const endDate = new Date(endYear, endMonth, endDay);
       const data = await db
         .collection('sobrecalentamientos')
+        .where('fecha_hora', '>=', startDate)
+        .where('fecha_hora', '<', endDate)
         .orderBy('fecha_hora', 'desc')
         .get();
       data.forEach((doc: any) => {
@@ -25,7 +33,7 @@ export = {
         // console.log(doc.id, '=>', doc.data());
       });
     } catch (error) {
-      console.log('error en getSobrecalentamientos', error);
+      console.log('error en getSobrecalentamientosForCsv', error);
     }
     // console.log(sobrecalentamientos);
     return sobrecalentamientos;
@@ -101,13 +109,20 @@ export = {
     }
     return sobrecalentamiento;
   },
-  getEficienciasDeTrabajoForCsv: async () => {
+  getEficienciasDeTrabajoForCsv: async (
+    root,
+    { startYear, startMonth, startDay, endYear, endMonth, endDay }
+  ) => {
     let eficienciasDeTrabajo: String[] = [];
     try {
       const db = await connectDB();
       //TODO: add filter to get sobrecalentamientos between 2 dates
+      const startDate = new Date(startYear, startMonth, startDay);
+      const endDate = new Date(endYear, endMonth, endDay);
       const data = await db
         .collection('EficienciaDeTrabajo')
+        .where('fecha_hora', '>=', startDate)
+        .where('fecha_hora', '<', endDate)
         .orderBy('fecha_hora', 'desc')
         .get();
       data.forEach((doc: any) => {
@@ -120,7 +135,7 @@ export = {
         eficienciasDeTrabajo.push({ id, ...info, fecha: date, hora: time });
       });
     } catch (error) {
-      console.log('error en getEficienciasDeTrabajo', error);
+      console.log('error en getEficienciasDeTrabajoForCsv', error);
     }
     return eficienciasDeTrabajo;
   },

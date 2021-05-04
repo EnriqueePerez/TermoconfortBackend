@@ -2,7 +2,14 @@ scalar Timestamp
 
 type Query {
   "Retorna todos sobrecalentamientos con formato para csv o excel"
-  getSobrecalentamientosForCsv: [SobrecalentamientoForCsv]
+  getSobrecalentamientosForCsv(
+    startYear: Int
+    startMonth: Int
+    startDay: Int
+    endYear: Int
+    endMonth: Int
+    endDay: Int
+  ): [SobrecalentamientoForCsv]
   "Retorna los ultimos 150 sobrecalentamientos"
   getSobrecalentamientos: [Sobrecalentamiento]
   "Retorna un sobrecalentamiento de acuerdo al mes, año, tienda y unidad"
@@ -12,7 +19,14 @@ type Query {
     collection: String!
   ): Sobrecalentamiento
   "Retorna todos las eficiencias de trabajo con formato para csv o excel"
-  getEficienciasDeTrabajoForCsv: [EficienciaDeTrabajoForCsv]
+  getEficienciasDeTrabajoForCsv(
+    startYear: Int
+    startMonth: Int
+    startDay: Int
+    endYear: Int
+    endMonth: Int
+    endDay: Int
+  ): [EficienciaDeTrabajoForCsv]
   "Retorna las ultimos 200 eficiencias de trabajo"
   getEficienciasDeTrabajo: [EficienciaDeTrabajo]
   "Retorna una eficienca de trabajo de acuerdo al mes, año, tienda y unidad"
